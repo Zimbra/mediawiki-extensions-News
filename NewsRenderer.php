@@ -140,13 +140,14 @@ class NewsRenderer {
 		if ( !is_null( $this->namespaces ) ) {
 			$this->namespaces = preg_split('!\s*(\|\s*)+!', trim( $this->namespaces ) );
 
+			$namespaceInfo = MediaWikiServices::getInstance()->getNamespaceInfo();
 			foreach ($this->namespaces as $i => $ns) {
 				$ns = $contLang->lc($ns);
 
 				if ( $ns === '-' || $ns === '0' || $ns === 'main' || $ns === 'article' ) {
 					$this->namespaces[$i] = 0;
 				} else {
-					$this->namespaces[$i] = MWNamespace::getCanonicalIndex( $ns );
+					$this->namespaces[$i] = $namespaceInfo->getCanonicalIndex( $ns );
 					if ( $this->namespaces[$i] === false || $this->namespaces[$i] === null )
 						$this->namespaces[$i] = $contLang->getNsIndex( $ns );
 				}
