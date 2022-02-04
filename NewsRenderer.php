@@ -10,6 +10,7 @@
  */
 
 use MediaWiki\MediaWikiServices;
+use Wikimedia\Rdbms\IDatabase;
 
 define('NEWS_HEAD_LENGTH', 1024 * 2);
 define('NEWS_HEAD_SCAN', 256);
@@ -290,7 +291,7 @@ class NewsRenderer {
 			$offset += $chunk;
 
 			$has = false;
-			while ( ( $remaining > 0 ) && ( $row = $dbr->fetchObject($res) ) ) {
+			while ( ( $remaining > 0 ) && ( $row = $res->fetchObject() ) ) {
 				$has = true;
 
 				if ( $this->unique && $row->rc_namespace >= 0 ) {
@@ -302,8 +303,6 @@ class NewsRenderer {
 				$news[] = $row;
 				$remaining -= 1;
 			}
-
-			$dbr->freeResult( $res );
 
 			if ( !$has ) break; #empty result set, stop trying
 		}
@@ -659,16 +658,7 @@ class NewsRenderer {
 
 	static function getLastChangeTime( ) {
 		$dbr = wfGetDB( DB_REPLICA );
-		list( $trecentchanges ) = $dbr->tableNamesN( 'recentchanges' );
-
-		$sql = 'select max(rc_timestamp) from ' . $trecentchanges;
-		$res = $dbr->query( $sql, 'NewsRenderer::getLastChangeTime' );
-		if (!$res) return false;
-
-		$row = $dbr->fetchRow($res);
-		if (!$row) return false;
-
-		return $row[0];
+		return $dbr->selectField( 'recentchanges', 'max(rc_timestamp)', IDatabase::ALL_ROWS, __METHOD__ );
 	}
 
 	static function sanitizeWikiText( $text, $parser = null ) {
