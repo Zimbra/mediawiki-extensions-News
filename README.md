@@ -1,3 +1,31 @@
+# MediaWiki News Extension
+
+The MediaWiki foundation has removed the News Extension from their Github repositories. While I have reached out to MediaWiki and offered my changes to keep this extension in working order, I gotten no response. Since the license is GPL I am required to offer back any changes to the code, which is why this repository exists.
+
+## Supported MediaWiki versions:
+
+- 1.35.8
+- 1.39.0
+
+## Supported PHP versions:
+
+- PHP 7
+- PHP 8
+
+## Usage
+
+To list a number of recently updated articles on a Wiki page you can use the following code:
+
+```
+<ul class="list-group">
+<news limit="10" nominor >
+<li class="list-group-item">[[{{{pagename}}}]] ([[{{{user}}}]], {{{timeanddate}}})</li>
+</news>
+</ul>
+```
+
+It will render as seen on https://wiki.zimbra.com/wiki/Main_Page under Recent updated articles.
+
 --------------------------------------------------------------------------
 README for the News extension
 Copyright © 2007 Daniel Kinzler
@@ -18,15 +46,17 @@ and is released under the GNU General Public Licence (GPL).
 Note that the functionality of this extension overlaps with the DynamicPageList
 and DynamicPageList2 extensions - however, this extension has a different focus.
 
-== Installing ==
+## Installing
 
 Copy the News directory into the extensions folder of your 
 MediaWiki installation. Then add the following line to your
 LocalSettings.php file (near the end):
 
-  require_once( "$IP/extensions/News/News.php" );
+```
+require_once( "$IP/extensions/News/News.php" );
+```
 
-== Usage ==
+## Usage
 
 The News extension prvodes provides three custom tags:
 * <news>: this includes a list of recent changes on the wiki page
@@ -38,24 +68,30 @@ The News extension prvodes provides three custom tags:
   <newsfeed> tag. This is convenient for creating prominent links to the 
   news feeds.
 
-=== Filtering and formatting ===
+### Filtering and formatting
 
 To get the last 10 changes to your wiki on any wiki page, use the
 following:
 
-	<news/>
+```
+<news/>
+```
 
 You can provide options to controll the listing (for example, 20
 entries and no minor edits):
 
-	<news limit="20" nominor/>
+```
+<news limit="20" nominor/>
+```
 
 To define your own format for the generated list, you can provide a
 pattern that will be used for each entry:
 
-	<news limit="20" nominor>
-	* [[{{{pagename}}}]] ([[User:{{{user}}}]], {{{timeanddate}}})
-	</news>
+```
+<news limit="20" nominor>
+* [[{{{pagename}}}]] ([[User:{{{user}}}]], {{{timeanddate}}})
+</news>
+```
 
 For a full list of options and template parameters, see below.
 
@@ -63,7 +99,7 @@ The <newsfeed> tag supports the same optiosn for filtering and
 formatting as the <news> tag. For information on how to access a feed defined
 using <newsfeed>, see the section "Accessing Feeds" below.
 
-=== Options ===
+### Options
 The following options (tag attributes) can be used to controll the output of the
 <news> and <newsfeed> tags:
 
@@ -119,7 +155,7 @@ The following options (tag attributes) can be used to controll the output of the
 * postfix       wikitext to be inserted after the wikitext generated from the
                 template text is parsed. Can be used to make tables from news.
 
-=== Parameters ===
+### Parameters
 When giving a template text between the <news> tags, the following
 template-parameters are available (use them as {{{xxx}}}):
 
@@ -170,7 +206,7 @@ template-parameters are available (use them as {{{xxx}}}):
 
 * head         the page's content up to about 2KB of text, with smart cut-off.
 
-=== Accessing Feeds ===
+### Accessing Feeds
 
 If the page Foo defines a feed using a <newsfeed> tag, that feed can be
 referenced by using feed=rss or feed=atom in the url respectively.
@@ -200,7 +236,7 @@ the tooltip to show when the mouse hovers over the link.
 Note that the link text may contain full wiki text, and the title-attribute may
 contain variables like {{PAGENAME}}.
 
-== Configuration ==
+## Configuration
 Configuration settings to define in LocalSettings.php
 
 * $wgNewsFeedURLPattern: this defines the pattern used by the <newsfeedlink>

@@ -106,7 +106,7 @@ class NewsRenderer {
 			#$this->templateparser = clone $parser;
 			#$this->templateparser->setOutputType( Parser::OT_HTML );
 			$this->templateoptions = new ParserOptions( $context->getUser() );
-			$this->templateoptions->setNumberHeadings( false );
+
 			$this->templateoptions->setRemoveComments( true );
 			//$this->templateoptions->setUseDynamicDates( false ); // removed in mw 1.21
 			$this->templateoptions->setInterwikiMagic( true ); //strip interlanguage-links
@@ -436,7 +436,7 @@ class NewsRenderer {
 			$user = str_replace('$1', $row->rc_user_text, $wgNewsFeedUserPattern);
 		}
 		else {
-			$user = $row->rc_user_text;
+			$user = $change->mAttribs['rc_user_text'];
 		}
 
 		$title = Title::makeTitle( $row->rc_namespace, $row->rc_title ); //XXX: this is redundant, we already have a title object in renderRow. But no good way to pass it :(
@@ -507,7 +507,7 @@ class NewsRenderer {
 			$params['new'] = ( $row->rc_type == RC_NEW ) ? 'true' : '';
 
 			$params['type'] = $row->rc_type;
-			$params['user'] = $row->rc_user_text;
+			$params['user'] = $change->mAttribs['rc_user_text'];
 
 			$params['rawtime'] = $row->rc_timestamp;
 			$params['time'] = $wgLang->time( $row->rc_timestamp, true, true );
